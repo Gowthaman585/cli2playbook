@@ -1,19 +1,12 @@
 #include<vector>
 #include<iostream>
-class parse{
-	public:
-		std::string container_name;
+#include<string>
 
-		parse(const std::string name): container_name(name){
-		}
-
-		void display(){
-			std::cout<<"- name: get logs for "<<container_name<<"\n";
-			std::cout<<"  container.podman.podman_logs:\n";
-		}
-};
-int main(){
-	parse pr("tampertrace");
-	pr.display();
+int main(int argc,char* argv[]){
+	std::vector<std::string> args(argv+1,argv + argc);
+	for(int i =0;i<args.size();i++){
+		std::cout<<args[i]<<" ";
+	}
+	
 	return 0;
 }
