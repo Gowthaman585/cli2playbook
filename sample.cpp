@@ -6,12 +6,16 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string container_name;
 	std::string image_name;
 	std::vector<std::string> commands;
+	bool detach_mode= false;
 
 	size_t i= 2;
 
 	while(i< vec.size()){
 		if(vec[i] == "--name"&& i+1<vec.size()){
 			container_name= vec[++i];
+		}
+		else if((vec[i] == "--detach" || vec[i] == "-d") && image_name.empty()){
+			detach_mode = true;
 		}
 		else if(image_name.empty()){
 			image_name= vec[i];
@@ -28,6 +32,11 @@ void call_run_container(std::vector<std::string>& vec){
 	
 	if(!container_name.empty()){
 		std::cout<<"	name: "<<container_name<<"\n";
+	}
+
+	std::cout<<"	state: started\n";
+	if(detach_mode){
+		std::cout<<"	detach: true\n";
 	}
 
 	if(!commands.empty()){
