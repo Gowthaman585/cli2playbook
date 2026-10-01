@@ -11,7 +11,7 @@ void call_run_container(std::vector<std::string>& vec){
 	size_t i= 2;
 
 	while(i< vec.size()){
-		if(vec[i] == "--name"&& i+1<vec.size()){
+		if((vec[i] == "--name"|| vec[i] == "-n" )&& i+1<vec.size()){
 			container_name= vec[++i];
 		}
 		else if((vec[i] == "--detach" || vec[i] == "-d") && image_name.empty()){
