@@ -6,6 +6,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string container_name;
 	std::string image_name;
 	std::vector<std::string> commands;
+	std::vector<std::string> ports;
 	bool detach_mode= false;
 
 	size_t i= 2;
@@ -17,8 +18,11 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "--detach" || vec[i] == "-d") && image_name.empty()){
 			detach_mode = true;
 		}
-		else if(image_name.empty()){
-			image_name= vec[i];
+		else if((vec[i] == "-p" || vec[i] == "--publish")&& i+1<vec.size()){
+			ports.push_back(vec[++i]);
+		}
+		else if(!image_name.empty()){
+			image_name = vec[i];
 		}
 		else{
 			commands.push_back(vec[i]);
@@ -33,7 +37,13 @@ void call_run_container(std::vector<std::string>& vec){
 	if(!container_name.empty()){
 		std::cout<<"	name: "<<container_name<<"\n";
 	}
-
+	
+	if(!ports.empty()){
+		std::cout<<"	ports:\n";
+		for(const std::string cmds: ports){
+			std::cout<<"		- "<<cmds<<std::endl;
+		}
+	}
 	std::cout<<"	state: started\n";
 	if(detach_mode){
 		std::cout<<"	detach: true\n";
