@@ -7,6 +7,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string image_name;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
+	std::vector<std::string> volumes;
 	bool detach_mode= false;
 
 	size_t i= 2;
@@ -21,7 +22,10 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "-p" || vec[i] == "--publish")&& i+1<vec.size()){
 			ports.push_back(vec[++i]);
 		}
-		else if(!image_name.empty()){
+		else if((vec[i] == "-v" || vec[i] == "--volume") && i+1 <vec.size()){
+			volumes.push_back(vec[++i]);
+		}
+		else if(image_name.empty()){
 			image_name = vec[i];
 		}
 		else{
@@ -42,6 +46,12 @@ void call_run_container(std::vector<std::string>& vec){
 		std::cout<<"	ports:\n";
 		for(const std::string cmds: ports){
 			std::cout<<"		- "<<cmds<<std::endl;
+		}
+	}
+	if(!volumes.empty()){
+		std::cout<<"	volumes:\n";
+		for(const std::string vlms: volumes){
+			std::cout<<"		- "<<vlms<<"\n";
 		}
 	}
 	std::cout<<"	state: started\n";
