@@ -8,6 +8,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
+	std::vector<std::string> envs;
 	bool detach_mode= false;
 
 	size_t i= 2;
@@ -25,6 +26,9 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "-v" || vec[i] == "--volume") && i+1 <vec.size()){
 			volumes.push_back(vec[++i]);
 		}
+		else if((vec[i] == "-e" || vec[i] == "--env") && i+1 <vec.size()){
+			envs.push_back(vec[++i]);
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -36,6 +40,7 @@ void call_run_container(std::vector<std::string>& vec){
 
 	std::cout<<"- name: run container\n";
 	std::cout<<"  containers.podman.podman_container:\n";
+	
 	std::cout<<"	image: "<<image_name<<"\n";
 	
 	if(!container_name.empty()){
@@ -54,11 +59,19 @@ void call_run_container(std::vector<std::string>& vec){
 			std::cout<<"		- "<<vlms<<"\n";
 		}
 	}
+	if(!envs.empty()){
+		std::cout<<"	env:\n";
+		for(const std::string var_stat: envs){
+			size_t sep = var_stat.find("=");
+			std::cout<<"		- "<<var_stat.substr(0,sep)<<": "<<" \""<<var_stat.substr(sep+1)<<"\""<<std::endl;
+		}
+	}
+
 	std::cout<<"	state: started\n";
+	
 	if(detach_mode){
 		std::cout<<"	detach: true\n";
 	}
-
 	if(!commands.empty()){
 		std::cout<<"	command: ";
 		size_t t = 0;
