@@ -5,6 +5,7 @@
 void call_run_container(std::vector<std::string>& vec){
 	std::string container_name;
 	std::string image_name;
+	std::string network_mode;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
@@ -29,6 +30,9 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "-e" || vec[i] == "--env") && i+1 <vec.size()){
 			envs.push_back(vec[++i]);
 		}
+		else if(vec[i] == "--network" && i+1 <vec.size()){
+			network_mode = vec[++i];		
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -46,7 +50,10 @@ void call_run_container(std::vector<std::string>& vec){
 	if(!container_name.empty()){
 		std::cout<<"	name: "<<container_name<<"\n";
 	}
-	
+
+	if(!network_mode.empty()){
+		std::cout<<"	network: "<<network_mode<<std::endl;
+	}
 	if(!ports.empty()){
 		std::cout<<"	ports:\n";
 		for(const std::string cmds: ports){
