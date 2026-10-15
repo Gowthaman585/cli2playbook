@@ -6,6 +6,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string container_name;
 	std::string image_name;
 	std::string network_mode;
+	std::string restart_policy;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
@@ -33,6 +34,9 @@ void call_run_container(std::vector<std::string>& vec){
 		else if(vec[i] == "--network" && i+1 <vec.size()){
 			network_mode = vec[++i];		
 		}
+		else if(vec[i] == "--restart" && i+1 < vec.size()){
+			restart_policy = vec[++i];
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -53,6 +57,9 @@ void call_run_container(std::vector<std::string>& vec){
 
 	if(!network_mode.empty()){
 		std::cout<<"	network: "<<network_mode<<std::endl;
+	}
+	if(!restart_policy.empty()){
+		std::cout<<"	restart_policy: "<<restart_policy<<std::endl;
 	}
 	if(!ports.empty()){
 		std::cout<<"	ports:\n";
