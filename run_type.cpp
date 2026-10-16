@@ -7,6 +7,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string image_name;
 	std::string network_mode;
 	std::string restart_policy;
+	std::string workdir;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
@@ -31,11 +32,14 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "-e" || vec[i] == "--env") && i+1 <vec.size()){
 			envs.push_back(vec[++i]);
 		}
-		else if(vec[i] == "--network" && i+1 <vec.size()){
+		else if((vec[i] == "--network"|| vec[i] == "--net") && i+1 <vec.size()){
 			network_mode = vec[++i];		
 		}
 		else if(vec[i] == "--restart" && i+1 < vec.size()){
 			restart_policy = vec[++i];
+		}
+		else if((vec[i] == "--workdir" || vec[i] == "-w" ) && i+1 <vec.size()){
+			workdir = vec[++i];
 		}
 		else if(image_name.empty()){
 			image_name = vec[i];
@@ -60,6 +64,9 @@ void call_run_container(std::vector<std::string>& vec){
 	}
 	if(!restart_policy.empty()){
 		std::cout<<"	restart_policy: "<<restart_policy<<std::endl;
+	}
+	if(!workdir.empty()){
+		std::cout<<"	workdir: \""<<workdir<<"\""<<std::endl;
 	}
 	if(!ports.empty()){
 		std::cout<<"	ports:\n";
