@@ -8,6 +8,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string network_mode;
 	std::string restart_policy;
 	std::string workdir;
+	bool priv_mode = false;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
@@ -41,6 +42,9 @@ void call_run_container(std::vector<std::string>& vec){
 		else if((vec[i] == "--workdir" || vec[i] == "-w" ) && i+1 <vec.size()){
 			workdir = vec[++i];
 		}
+		else if(vec[i] == "--privileged"){
+			priv_mode = true;
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -63,21 +67,24 @@ void call_run_container(std::vector<std::string>& vec){
 		std::cout<<"	network: "<<network_mode<<std::endl;
 	}
 	if(!restart_policy.empty()){
-		std::cout<<"	restart_policy: "<<restart_policy<<std::endl;
+		std::cout<<"	restart_policy: "<<"\""<<restart_policy<<"\""<<std::endl;
 	}
 	if(!workdir.empty()){
 		std::cout<<"	workdir: \""<<workdir<<"\""<<std::endl;
 	}
+	if(priv_mode){
+		std::cout<<"	privileged: true"<<std::endl;
+	}
 	if(!ports.empty()){
 		std::cout<<"	ports:\n";
 		for(const std::string cmds: ports){
-			std::cout<<"		- "<<cmds<<std::endl;
+			std::cout<<"		- "<<"\""<<cmds<<"\""<<std::endl;
 		}
 	}
 	if(!volumes.empty()){
 		std::cout<<"	volumes:\n";
 		for(const std::string vlms: volumes){
-			std::cout<<"		- "<<vlms<<"\n";
+			std::cout<<"		- "<<"\""<<vlms<<"\""<<"\n";
 		}
 	}
 	if(!envs.empty()){
