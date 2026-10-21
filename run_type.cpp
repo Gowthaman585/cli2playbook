@@ -9,6 +9,7 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string restart_policy;
 	std::string workdir;
 	bool priv_mode = false;
+	bool auto_remove = false;
 	std::vector<std::string> commands;
 	std::vector<std::string> ports;
 	std::vector<std::string> volumes;
@@ -45,6 +46,9 @@ void call_run_container(std::vector<std::string>& vec){
 		else if(vec[i] == "--privileged"){
 			priv_mode = true;
 		}
+		else if(vec[i] == "--rm" && i + 1<vec.size()){
+			auto_remove = true;
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -74,6 +78,9 @@ void call_run_container(std::vector<std::string>& vec){
 	}
 	if(priv_mode){
 		std::cout<<"	privileged: true"<<std::endl;
+	}
+	if(auto_remove){
+		std::cout<<"	rm: true"<<std::endl;
 	}
 	if(!ports.empty()){
 		std::cout<<"	ports:\n";
