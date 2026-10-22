@@ -8,6 +8,8 @@ void call_run_container(std::vector<std::string>& vec){
 	std::string network_mode;
 	std::string restart_policy;
 	std::string workdir;
+	std::string host_name;
+	std::string user;
 	bool priv_mode = false;
 	bool auto_remove = false;
 	std::vector<std::string> commands;
@@ -49,6 +51,12 @@ void call_run_container(std::vector<std::string>& vec){
 		else if(vec[i] == "--rm" && i + 1<vec.size()){
 			auto_remove = true;
 		}
+		else if(vec[i] == "--hostname" && i+1 < vec.size()){
+			host_name = vec[++i];
+		}
+		else if((vec[i] == "--user" || vec[i] == "-u") && i+1 <vec.size()){
+			user = vec[++i];
+		}
 		else if(image_name.empty()){
 			image_name = vec[i];
 		}
@@ -66,7 +74,12 @@ void call_run_container(std::vector<std::string>& vec){
 	if(!container_name.empty()){
 		std::cout<<"	name: "<<container_name<<"\n";
 	}
-
+	if(!host_name.empty()){
+		std::cout<<"	hostname: \""<<host_name<<"\""<<std::endl;
+	}
+	if(!user.empty()){
+		std::cout<<"	user: \""<<user<<"\""<<std::endl;
+	}
 	if(!network_mode.empty()){
 		std::cout<<"	network: "<<network_mode<<std::endl;
 	}
