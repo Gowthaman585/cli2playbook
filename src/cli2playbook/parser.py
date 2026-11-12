@@ -1,0 +1,38 @@
+from cli2playbook.options import OPTION_RULES, OptType
+
+def parse_lists_only(args):
+    """
+    Parses only the list-type arguments based on the current implementation.
+    """
+    parsed_data = {
+        "lists": {}
+    }
+
+    i = 0
+    while i < len(args):
+        current_arg = args[i]
+        matched_rule = None
+        
+        for rule in OPTION_RULES:
+            if current_arg in rule["flags"]:
+                matched_rule = rule
+                break
+                
+        # If it matched a LIST rule
+        if matched_rule:
+            if matched_rule["type"] == OptType.LIST:
+                key = matched_rule["key"]
+                if i + 1 < len(args):
+                    val = args[i + 1]
+                    i += 1  # Skip the next word since we consumed it
+                
+                    # If the list doesn't exist yet for this key, create it!
+                    if key not in parsed_data["lists"]:
+                        parsed_data["lists"][key] = []
+                    
+                    # Append the value into our list box
+                    parsed_data["lists"][key].append(val)
+                
+        i += 1
+
+    return parsed_data
