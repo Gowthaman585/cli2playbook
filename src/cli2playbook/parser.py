@@ -6,7 +6,8 @@ def parse_cli_args(args):
     """
     parsed_data = {
         "lists": {},
-        "values" : {}
+        "values" : {},
+        "flags" : {}
     }
 
     i = 0
@@ -22,6 +23,7 @@ def parse_cli_args(args):
         # If it matched a LIST rule
         if matched_rule:
             
+            # for LISTS containers
             if matched_rule["type"] == OptType.LIST:
                 key = matched_rule["key"]
                 if i + 1 < len(args):
@@ -36,7 +38,7 @@ def parse_cli_args(args):
                     parsed_data["lists"][key].append(val)
 
 
-
+            # for VALUES container
             if matched_rule["type"] == OptType.VALUE:
                 key = matched_rule["key"]
                 if i + 1 < len(args):
@@ -44,6 +46,13 @@ def parse_cli_args(args):
                     i = i + 1
                     
                     parsed_data["values"][key] = val
+
+
+            # for FLAG container
+            if matched_rule["type"] == OptType.FLAG:
+                key = matched_rule["key"]
+                parsed_data["flags"][key] = True
+
         i = i+ 1
 
     return parsed_data

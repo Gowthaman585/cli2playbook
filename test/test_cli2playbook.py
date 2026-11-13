@@ -3,7 +3,7 @@ from cli2playbook.parser import parse_cli_args
 
 class TestParser(unittest.TestCase):
     
-    def test_LISTS_VALUES(self):
+    def test_LISTS_VALUES_FLAGS(self):
         args = [
                 # 1. VALUE options
                 "--name", "my-app",
@@ -29,12 +29,20 @@ class TestParser(unittest.TestCase):
                 "--dns", "8.8.8.8",
                 "--ulimit", "nofile=1024:2048",
                 "--security-opt", "no-new-privileges",
-                "--tmpfs", "/run"
+                "--tmpfs", "/run",
+
+                # 3. FLAG options
+                "--detach",
+                "--read-only",
+                "--init",
+                "--privileged",
+                "--rm"
                 ]
         
         result = parse_cli_args(args)
         
         expected_output = {
+                
                 "lists": {
                     "ports": ["80:80", "443:443"],
                     "volumes": ["/data:/app/data"],
@@ -45,7 +53,8 @@ class TestParser(unittest.TestCase):
                     "ulimits": ["nofile=1024:2048"],
                     "security_opts": ["no-new-privileges"],
                     "tmpfs_mounts": ["/run"]
-                },
+                    },
+                
                 "values": {
                     "container_name": "my-app",
                     "memory_limit": "1g",
@@ -59,7 +68,15 @@ class TestParser(unittest.TestCase):
                     "workdir": "/app",
                     "host_name": "node1",
                     "user": "1000:1000"
-                }
+                    },
+
+                "flags": {
+                    "detach_mode": True,
+                    "read_only_mode": True,
+                    "init_mode": True,
+                    "priv_mode": True,
+                    "auto_remove": True
+                    }
         }
     
         self.assertEqual(result, expected_output)
