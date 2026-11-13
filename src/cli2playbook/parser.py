@@ -1,11 +1,14 @@
 from cli2playbook.options import OPTION_RULES, OptType
 
-def parse_lists_only(args):
+def parse_cli_args(args):
     """
     Parses only the list-type arguments based on the current implementation.
     """
     parsed_data = {
-        "lists": {}
+        "lists": {},
+        "values" : {},
+        "flags" : {},
+        "maps" : {}
     }
 
     i = 0
@@ -20,6 +23,8 @@ def parse_lists_only(args):
                 
         # If it matched a LIST rule
         if matched_rule:
+            
+            # for LISTS containers
             if matched_rule["type"] == OptType.LIST:
                 key = matched_rule["key"]
                 if i + 1 < len(args):
@@ -32,7 +37,38 @@ def parse_lists_only(args):
                     
                     # Append the value into our list box
                     parsed_data["lists"][key].append(val)
+
+
+            # for VALUES container
+            elif matched_rule["type"] == OptType.VALUE:
+                key = matched_rule["key"]
+                if i + 1 < len(args):
+                    val = args[i+1]
+                    i = i + 1
+                    
+                    parsed_data["values"][key] = val
+
+
+            # for FLAG container
+            elif matched_rule["type"] == OptType.FLAG:
+                key = matched_rule["key"]
+                parsed_data["flags"][key] = True
+
+            # for map container
+            elif matched_rule["type"] == OptType.MAP:
+                sep = matched_rule.get("sep","=")
+                key = matched_rule["key"]
                 
-        i += 1
+                if key not in parsed_data["maps"]:
+                    parsed_data["maps"][key] = {}
+                
+                if i + 1 < len(args):
+                    map_key , map_val = args[i+1].split(sep, 1)
+                    i = i + 1
+
+                if key in parsed_data["maps"]:
+                    parsed_data["maps"][key][map_key] = map_val
+
+        i = i+ 1
 
     return parsed_data
