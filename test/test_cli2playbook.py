@@ -3,7 +3,7 @@ from cli2playbook.parser import parse_cli_args
 
 class TestParser(unittest.TestCase):
     
-    def test_LISTS_VALUES_FLAGS(self):
+    def test_LISTS_VALUES_FLAGS_MAP_container_parsing(self):
         args = [
                 # 1. VALUE options
                 "--name", "my-app",
@@ -36,7 +36,14 @@ class TestParser(unittest.TestCase):
                 "--read-only",
                 "--init",
                 "--privileged",
-                "--rm"
+                "--rm",
+
+                # 4. MAP options
+                "-e", "ENV_VAR=production",
+                "-e", "DEBUG=true",
+                "--add-host", "myhost:192.168.1.10",
+                "-l", "tier=backend" ,
+                "-l" , "stage=production",
                 ]
         
         result = parse_cli_args(args)
@@ -76,8 +83,22 @@ class TestParser(unittest.TestCase):
                     "init_mode": True,
                     "priv_mode": True,
                     "auto_remove": True
+                    },
+
+                "maps": {
+                    "envs": {
+                        "ENV_VAR": "production",
+                        "DEBUG": "true"
+                        },
+                    "extra_hosts": {
+                        "myhost": "192.168.1.10"
+                        },
+                    "labels": {
+                        "tier": "backend",
+                        "stage": "production"
+                        }
                     }
-        }
+                }
     
         self.assertEqual(result, expected_output)
 

@@ -7,7 +7,8 @@ def parse_cli_args(args):
     parsed_data = {
         "lists": {},
         "values" : {},
-        "flags" : {}
+        "flags" : {},
+        "maps" : {}
     }
 
     i = 0
@@ -39,7 +40,7 @@ def parse_cli_args(args):
 
 
             # for VALUES container
-            if matched_rule["type"] == OptType.VALUE:
+            elif matched_rule["type"] == OptType.VALUE:
                 key = matched_rule["key"]
                 if i + 1 < len(args):
                     val = args[i+1]
@@ -49,9 +50,24 @@ def parse_cli_args(args):
 
 
             # for FLAG container
-            if matched_rule["type"] == OptType.FLAG:
+            elif matched_rule["type"] == OptType.FLAG:
                 key = matched_rule["key"]
                 parsed_data["flags"][key] = True
+
+            # for map container
+            elif matched_rule["type"] == OptType.MAP:
+                sep = matched_rule.get("sep","=")
+                key = matched_rule["key"]
+                
+                if key not in parsed_data["maps"]:
+                    parsed_data["maps"][key] = {}
+                
+                if i + 1 < len(args):
+                    map_key , map_val = args[i+1].split(sep, 1)
+                    i = i + 1
+
+                if key in parsed_data["maps"]:
+                    parsed_data["maps"][key][map_key] = map_val
 
         i = i+ 1
 
