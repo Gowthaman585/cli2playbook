@@ -47,9 +47,9 @@ class TestParser(unittest.TestCase):
                 ]
         
         result = parse_cli_args(args)
-        
+
         expected_output = {
-                
+
                 "lists": {
                     "ports": ["80:80", "443:443"],
                     "volumes": ["/data:/app/data"],
@@ -99,7 +99,7 @@ class TestParser(unittest.TestCase):
                         }
                     }
                 }
-    
+   
         self.assertEqual(result, expected_output)
 
 if __name__ == "__main__":
