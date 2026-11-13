@@ -1,11 +1,12 @@
 from cli2playbook.options import OPTION_RULES, OptType
 
-def parse_lists_only(args):
+def parse_cli_args(args):
     """
     Parses only the list-type arguments based on the current implementation.
     """
     parsed_data = {
-        "lists": {}
+        "lists": {},
+        "values" : {}
     }
 
     i = 0
@@ -20,6 +21,7 @@ def parse_lists_only(args):
                 
         # If it matched a LIST rule
         if matched_rule:
+            
             if matched_rule["type"] == OptType.LIST:
                 key = matched_rule["key"]
                 if i + 1 < len(args):
@@ -32,7 +34,16 @@ def parse_lists_only(args):
                     
                     # Append the value into our list box
                     parsed_data["lists"][key].append(val)
-                
-        i += 1
+
+
+
+            if matched_rule["type"] == OptType.VALUE:
+                key = matched_rule["key"]
+                if i + 1 < len(args):
+                    val = args[i+1]
+                    i = i + 1
+                    
+                    parsed_data["values"][key] = val
+        i = i+ 1
 
     return parsed_data
