@@ -37,8 +37,26 @@ class TestEmitter(unittest.TestCase):
                     "privileged": True,
                     "auto_remove": True
                     },
-                    "maps": {}
+                "maps": {
+                    "env": {
+                        "ENV_VAR": "production",
+                        "DEBUG": "true"
+                        },
+                    "extra_hosts": {
+                        "myhost": "192.168.1.10"
+                        },
+                    "labels": {
+                        "tier": "backend",
+                        "stage": "production"
+                        },
+                    "sysctls": {
+                        "net.core.somaxconn": "1024"
+                        },
+                    "log_options": {
+                        "max-size": "10m"
+                        }
                     }
+                }
         
         result = generate_ansible_task(parsed_data)
         
@@ -74,8 +92,26 @@ class TestEmitter(unittest.TestCase):
                     "read_only": True,
                     "init": True,
                     "privileged": True,
-                    "auto_remove": True
+                    "auto_remove": True,
 
+                    # All Maps
+                    "env": {
+                        "ENV_VAR": "production",
+                        "DEBUG": "true"
+                        },
+                    "extra_hosts": {
+                        "myhost": "192.168.1.10"
+                        },
+                    "labels": {
+                        "tier": "backend",
+                        "stage": "production"
+                        },
+                    "sysctls": {
+                        "net.core.somaxconn": "1024"
+                        },
+                    "log_options": {
+                        "max-size": "10m"
+                        }
                     }
                 }
         
