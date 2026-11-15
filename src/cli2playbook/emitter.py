@@ -18,5 +18,10 @@ def generate_ansible_task(parsed_data):
         # Avoid any argument which has it flag but not value if they depends on value
         if val_list: 
             docker_args[key] = val_list
+
+    parsed_values = parsed_data.get("values",{})
+    for key, val_values in parsed_values.items():
+        if val_values:
+            docker_args[key] = val_values
             
     return ansible_task
