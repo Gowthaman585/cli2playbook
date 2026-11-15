@@ -30,7 +30,13 @@ class TestEmitter(unittest.TestCase):
                     "hostname": "node1",
                     "user": "1000:1000"
                     },
-                    "flags": {},
+                "flags": {
+                    "detach": True,
+                    "read_only": True,
+                    "init": True,
+                    "privileged": True,
+                    "auto_remove": True
+                    },
                     "maps": {}
                     }
         
@@ -61,7 +67,14 @@ class TestEmitter(unittest.TestCase):
                     "restart": "always",
                     "working_dir": "/app",
                     "hostname": "node1",
-                    "user": "1000:1000"
+                    "user": "1000:1000",
+                        
+                    # All Flags
+                    "detach": True,
+                    "read_only": True,
+                    "init": True,
+                    "privileged": True,
+                    "auto_remove": True
 
                     }
                 }
