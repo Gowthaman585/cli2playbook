@@ -31,5 +31,11 @@ def generate_ansible_task(parsed_data):
         if val_flags:
             docker_args[key] = val_flags
 
+    parsed_values = parsed_data.get("maps",{})
+    for key, val_maps in parsed_values.items():
+        if val_maps:
+            docker_args[key] = val_maps
+
+
             
     return ansible_task
